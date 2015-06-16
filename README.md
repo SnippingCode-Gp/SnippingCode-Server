@@ -8,7 +8,7 @@ Snipping Code is open project which you can to pull your Code on your File direc
 
 ### How do I get set up? ###
 
-* install maven ( http://maven.apache.org/download.cgi )
+* install [maven] ( http://maven.apache.org/download.cgi )
 * using the same configration of maven
 * npm install on the path of Project
 * install my sql and make password root and user name root
