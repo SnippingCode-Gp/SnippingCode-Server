@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						
+       					http://www.springframework.org/schema/tx
+       					http://www.springframework.org/schema/tx/spring-tx.xsd
+       					
+       					http://www.springframework.org/schema/data/jpa
+       					http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"><!-- org.springframework.jdbc.datasource.DriverManagerDataSource -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost/CodeSnipping" />
+		<property name="user" value="root" />
+		<property name="password" value="root" />
+		<property name="minPoolSize" value="1" />
+		<property name="maxPoolSize" value="10" />
+		<property name="checkoutTimeout" value="1000" />
+		<property name="maxIdleTime" value="100" />
+		<property name="idleConnectionTestPeriod" value="10" />
+		<property name="maxStatements" value="0" />
+	</bean>
+
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan" value="com" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<!--<property name="databasePlatform" value="org.hibernate.dialect.MySQL5InnoDBDialect"/> -->
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+				<!--<property name="hibernate.connection.charSet" value="UTF-8"/> -->
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.connection.characterEncoding">UTF-8</prop>
+				<prop key="hibernate.connection.useUnicode">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!-- persistance exception -->
+	<bean
+		class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+
+	<!-- transactionManager component scan -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<jpa:repositories base-package="com" />
+
+</beans>
