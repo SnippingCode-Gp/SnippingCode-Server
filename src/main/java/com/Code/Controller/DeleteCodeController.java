@@ -1,9 +1,9 @@
 package com.Code.Controller;
 
+import com.Code.ObjectRequest.ValidationObject;
 import com.CommonService.UserExist;
 import com.Code.Domain.CodeDomain;
 import com.DataType.StringType;
-import com.Code.ObjectRequest.DeleteRequestObject;
 import com.Code.Repository.CodeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +29,7 @@ public class DeleteCodeController {
     private StringType responseString;
 
     @RequestMapping(value = "/delete/{name}" , method =  RequestMethod.POST)
-    public ResponseEntity<StringType> deleteObject(@RequestBody DeleteRequestObject deleteObjReq ,
+    public ResponseEntity<StringType> deleteObject(@RequestBody ValidationObject deleteObjReq ,
                                                    @PathVariable("name") String name){
 
         if(!userExist.checkUserExist(deleteObjReq.getUsername() , deleteObjReq.getPassword())){
