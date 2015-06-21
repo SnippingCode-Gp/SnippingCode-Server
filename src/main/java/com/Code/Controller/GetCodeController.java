@@ -59,7 +59,7 @@ public class GetCodeController {
             code.setDescription(codes.get(0).getDescription());
             code.setCode(codes.get(0).getCode());
             code.setType(codes.get(0).getType());
-            System.out.println("Accepted");
+            code.setTags(codeRetreiveService.convertToStringTags(codes.get(0).getTags()));
             return new ResponseEntity<CodeDomainParser>(code , HttpStatus.ACCEPTED);
         }else {
             return new ResponseEntity(HttpStatus.NOT_FOUND);

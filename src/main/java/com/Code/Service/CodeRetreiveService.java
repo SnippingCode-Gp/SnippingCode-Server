@@ -58,7 +58,7 @@ public class CodeRetreiveService {
     }
 
 
-    private String convertToStringTags(Set<Tags> tags) {
+    public String convertToStringTags(Set<Tags> tags) {
         if(tags == null)
             return "";
         StringBuilder string = new StringBuilder("");

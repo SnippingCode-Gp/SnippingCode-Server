@@ -12,6 +12,7 @@ public class CodeDomainParser implements Serializable {
 	private String type;
 	private String code;
     private String description;
+    private String tags;
 
     public String getDescription() {
         return description;
@@ -52,5 +53,13 @@ public class CodeDomainParser implements Serializable {
         System.out.println("description{" + description + "}");
         System.out.println(code);
         System.out.println("*************** code ***************");
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }
