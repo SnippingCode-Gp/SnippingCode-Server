@@ -46,52 +46,6 @@ public class GetCodeController {
     @Autowired
     UserExist userExist;
 
-    @RequestMapping(value = "/getCodeByName", method = RequestMethod.POST,headers = "content-type=application/x-www-form-urlencoded")
-    @org.springframework.transaction.annotation.Transactional
-    public ResponseEntity<CodeDomainParser> getFilesByName( @ModelAttribute CodeReq codeReq) {
-        if(!userExist.checkUserExist(codeReq.getUsername() , codeReq.getPassword())){
-            return new ResponseEntity<CodeDomainParser>(HttpStatus.NOT_FOUND);
-        }
-        List<CodeDomain> codes = codeRepository.findByname(codeReq.getName());
-        if(codes.size() != 0){
-            CodeDomainParser code = new CodeDomainParser();
-            code.setName(codes.get(0).getName());
-            code.setDescription(codes.get(0).getDescription());
-            code.setCode(codes.get(0).getCode());
-            code.setType(codes.get(0).getType());
-            code.setTags(codeRetreiveService.convertToStringTags(codes.get(0).getTags()));
-            return new ResponseEntity<CodeDomainParser>(code , HttpStatus.ACCEPTED);
-        }else {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-
-    }
-
-    @RequestMapping(value = "/viewPlugin", method = RequestMethod.POST,headers = "content-type=application/x-www-form-urlencoded")
-    @org.springframework.transaction.annotation.Transactional
-    public ResponseEntity<List<CodeObjectRequest>> getFilesCodesPlugin( @ModelAttribute EclipsePlugin eclipse) {
-        System.out.println("wa7shnui sotak y ebn el gzma");
-        System.out.println(eclipse.getUsername() + " " + eclipse.getPassword() + " " + eclipse.getNumber());
-        if(!userExist.checkUserExist(eclipse.getUsername() , eclipse.getPassword())){
-            return new ResponseEntity<List<CodeObjectRequest>>(HttpStatus.NOT_FOUND);
-        }
-        List<CodeDomain> userCodes = null;
-        try {
-            int num = Integer.parseInt(eclipse.getNumber());
-            Pageable range = new PageRequest(num,5);
-            userCodes = codeRepository.findByusername(eclipse.getUsername() , range);
-            if(userCodes.size() == 0){
-                return new ResponseEntity<List<CodeObjectRequest>>(HttpStatus.NOT_FOUND);
-            }else{
-                List<CodeObjectRequest> codeObjectRequests = codeRetreiveService.changeFromDomainToRequestObj(userCodes);
-                return new ResponseEntity<List<CodeObjectRequest>>(codeObjectRequests, HttpStatus.OK);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<List<CodeObjectRequest>>(HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
-
 	@RequestMapping(value = "/view/{number}", method = RequestMethod.POST)
     @org.springframework.transaction.annotation.Transactional
     public ResponseEntity<List<CodeObjectRequest>> getFilesCodes(@PathVariable String number ,

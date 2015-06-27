@@ -4,6 +4,9 @@
 */
 package com.User.Controller.UserOperation;
 
+import com.Code.Domain.CodeDomain;
+import com.Code.ObjectRequest.CodeDomainParser;
+import com.Code.ObjectRequest.CodeReq;
 import com.User.Domain.UserDomain;
 import com.DataType.StringType;
 import com.User.ObjectRequest.LoginContain;
@@ -14,10 +17,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -75,6 +75,34 @@ public class LoginController {
             return new ResponseEntity(HttpStatus.OK);
         }else{
             return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/eclipselogin", method = RequestMethod.POST,headers = "content-type=application/x-www-form-urlencoded")
+    @org.springframework.transaction.annotation.Transactional
+    public ResponseEntity<StringType> eclipseLogin(@ModelAttribute LoginContain loginReqobject) {
+
+        try {
+            String username = loginReqobject.getUsername();
+            String password = loginReqobject.getPassword();
+            List<UserDomain> usr = UserRepo.findByusername(username);
+            if (usr.size() != 0) {
+                UserDomain getusr = usr.get(0);
+
+                if (getusr.getPassword().equals(password)) {
+                    date.setString("exist");
+                    return new ResponseEntity<StringType>(date, HttpStatus.OK);
+                }else{
+                    date.setString("password wrong");
+                    return new ResponseEntity<StringType>(date, HttpStatus.NOT_FOUND);
+                }
+            }else{
+                date.setString("user not Found");
+                return new ResponseEntity<StringType>(date, HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            date.setString("not exist");
+            return new ResponseEntity<StringType>(date, HttpStatus.NOT_FOUND);
         }
     }
 }
