@@ -14,9 +14,9 @@ import java.util.Set;
 @RestController
 @Entity
 
-public class CodeDomain implements Serializable {
+public class Code implements Serializable {
 
-    public CodeDomain() {}
+    public Code() {}
 
     @Id
     @GeneratedValue

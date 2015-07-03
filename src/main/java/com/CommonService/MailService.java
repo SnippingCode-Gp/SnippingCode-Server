@@ -21,7 +21,6 @@ public class MailService {
     }
 
     public void sendMail(String from, String to, String subject, String msg) {
-
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(from);

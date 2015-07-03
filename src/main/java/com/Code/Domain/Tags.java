@@ -22,17 +22,17 @@ public class Tags implements Serializable {
 
     @Column(nullable = true)
     @ManyToMany(mappedBy="tags")
-    private Set<CodeDomain> codeDomain = new HashSet<CodeDomain>();
+    private Set<Code> code = new HashSet<Code>();
 
     @Column(nullable = false)
     private String name;
 
-    public Set<CodeDomain> getCodeDomain() {
-        return codeDomain;
+    public Set<Code> getCode() {
+        return code;
     }
 
-    public void setCodeDomain(Set<CodeDomain> codeDomain) {
-        this.codeDomain = codeDomain;
+    public void setCode(Set<Code> code) {
+        this.code = code;
     }
 
     public long getId() {

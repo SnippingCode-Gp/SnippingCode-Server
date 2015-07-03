@@ -1,10 +1,10 @@
 package com.User.Controller.UserControl;
 
-import com.User.Domain.UserDomain;
+import com.User.Domain.User;
 import com.DataType.StringType;
 import com.User.ObjectRequest.GetUserObjectRequest;
 import com.User.Repository.UserRepository;
-import com.CommonService.UserExist;
+import com.User.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,21 +27,21 @@ public class GetUserControl {
     private StringType data;
 
     @Autowired
-    private UserExist userExist;
+    private UserService userService;
 
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
-    public ResponseEntity<UserDomain> getUser(@RequestBody GetUserObjectRequest user){
-        UserDomain userDomain = null;
+    public ResponseEntity<User> getUser(@RequestBody GetUserObjectRequest user){
+        User userDomain = null;
 
-        if(!userExist.checkUserExist(user.getUsername(), user.getPassword())){
+        if(!userService.checkUserExist(user.getUsername(), user.getPassword())){
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
         try{
             userDomain = userRepository.findByusername(user.getUsername()).get(0);
-            return new ResponseEntity<UserDomain>(userDomain , HttpStatus.OK);
+            return new ResponseEntity<User>(userDomain , HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<UserDomain>(userDomain , HttpStatus.NOT_FOUND);
+            return new ResponseEntity<User>(userDomain , HttpStatus.NOT_FOUND);
         }
     }
 

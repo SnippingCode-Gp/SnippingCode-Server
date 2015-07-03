@@ -4,10 +4,7 @@
 */
 package com.User.Controller.UserOperation;
 
-import com.Code.Domain.CodeDomain;
-import com.Code.ObjectRequest.CodeDomainParser;
-import com.Code.ObjectRequest.CodeReq;
-import com.User.Domain.UserDomain;
+import com.User.Domain.User;
 import com.DataType.StringType;
 import com.User.ObjectRequest.LoginContain;
 import com.User.Repository.UserRepository;
@@ -37,9 +34,9 @@ public class LoginController {
 		try {
 			String username = loginReqobject.getUsername();
 			String password = loginReqobject.getPassword();
-			List<UserDomain> usr = UserRepo.findByusername(username);
+			List<User> usr = UserRepo.findByusername(username);
 			if (usr.size() != 0) {
-				UserDomain getusr = usr.get(0);
+				User getusr = usr.get(0);
 
 				if (getusr.getPassword().equals(password)) {
 					date.setString("exist");
@@ -58,20 +55,24 @@ public class LoginController {
 		}
 	}
 
-    MailService mm;
+    MailService mailService;
     ApplicationContext context;
 
     @RequestMapping(value = "/forgetPassword" , method = RequestMethod.POST)
     public ResponseEntity forgetPassword(@RequestBody String email){
+        System.out.println("forget password " + email);
         context = new ClassPathXmlApplicationContext("/spring/mail.xml");
-        mm = (MailService) context.getBean("mailMail");
+        mailService = (MailService) context.getBean("mailMail");
 
-        List<UserDomain> user = UserRepo.findByemail(email);
+        List<User> user = UserRepo.findByemail(email);
         if(user.size() != 0 ){
-            mm.sendMail("ahmednasser1993@gmail.com",
-                    email, "resetPassword",
-                    "your user name is " + user.get(0).getUsername() + "\n"
-                    +"your password is " + user.get(0).getPassword());
+            User usr = user.get(0);
+            StringBuilder msg = new StringBuilder("Hello " + usr.getName());
+            msg.append(" this is generated mail From CodeSnipping Website to know your password \n\n");
+            msg.append("your email is " + email + "\n\n");
+            msg.append("your password is " + usr.getPassword() + "\n\n");
+            msg.append("your username is " + usr.getUsername() + "\n\n");
+            mailService.sendMail("codesnipping2014@gmail.com", email, "forget passwordPassword", msg.toString());
             return new ResponseEntity(HttpStatus.OK);
         }else{
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -85,9 +86,9 @@ public class LoginController {
         try {
             String username = loginReqobject.getUsername();
             String password = loginReqobject.getPassword();
-            List<UserDomain> usr = UserRepo.findByusername(username);
+            List<User> usr = UserRepo.findByusername(username);
             if (usr.size() != 0) {
-                UserDomain getusr = usr.get(0);
+                User getusr = usr.get(0);
 
                 if (getusr.getPassword().equals(password)) {
                     date.setString("exist");

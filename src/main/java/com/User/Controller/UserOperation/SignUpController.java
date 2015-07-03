@@ -5,6 +5,7 @@ package com.User.Controller.UserOperation;
  * SignUpController
  */
 import com.User.ObjectRequest.SignUpRequest;
+import com.User.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.User.Domain.UserDomain;
+import com.User.Domain.User;
 import com.DataType.StringType;
 import com.User.Repository.UserRepository;
-import com.User.Service.SignUpService;
 
 @RestController
 @RequestMapping("/SignUp")
@@ -25,7 +25,7 @@ import com.User.Service.SignUpService;
 public class SignUpController {
 
 	@Autowired
-	private SignUpService signService;
+	private UserService userService;
 
 	@Autowired
 	private UserRepository user;
@@ -46,7 +46,7 @@ public class SignUpController {
             return new ResponseEntity<StringType>(data, HttpStatus.CONFLICT);
         }
 
-		UserDomain newUsr = signService.createNewUser(signUpReqobject);
+		User newUsr = userService.createNewUser(signUpReqobject);
 		data.setString("Done");
 		user.save(newUsr);
 		return new ResponseEntity<StringType>(data, HttpStatus.OK);

@@ -4,7 +4,7 @@ import com.Code.Domain.Comment;
 import com.Code.ObjectRequest.AllCommentRequestObject;
 import com.Code.ObjectRequest.CommentRequestObject;
 import com.Code.Repository.CommentRepository;
-import com.CommonService.UserExist;
+import com.User.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +27,11 @@ public class CommentController {
     CommentRepository commentRepository;
 
     @Autowired
-    UserExist userExist;
+    UserService userService;
 
     @RequestMapping(value = "/newComment" , method = RequestMethod.POST)
     public ResponseEntity newComment(@RequestBody CommentRequestObject commentRequestObject){
-        if(!userExist.checkUserExist(commentRequestObject.getUsername(),commentRequestObject.getPassword()))
+        if(!userService.checkUserExist(commentRequestObject.getUsername(),commentRequestObject.getPassword()))
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         Comment comment = new Comment();
         comment.setDescription(commentRequestObject.getDescription());
@@ -43,7 +43,7 @@ public class CommentController {
 
     @RequestMapping(value = "/getComments/{number}" , method = RequestMethod.POST)
     public ResponseEntity<List<Comment>> getComments(@RequestBody AllCommentRequestObject commentRequestObject){
-        if(!userExist.checkUserExist(commentRequestObject.getUsername(),commentRequestObject.getPassword()))
+        if(!userService.checkUserExist(commentRequestObject.getUsername(),commentRequestObject.getPassword()))
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         List<Comment> comment = commentRepository.findByCodeName(commentRequestObject.getCodeName());
         System.out.println("size " + comment.size());

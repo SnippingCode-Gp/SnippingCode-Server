@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 @RestController
 @Entity
-public class UserDomain implements Serializable{
+public class User implements Serializable{
 
     @Id
 	@GeneratedValue
